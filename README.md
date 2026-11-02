@@ -1,150 +1,309 @@
-# NovaLoom Digital — Full Website Starter
+# 🚀 NovaLoom Digital Solutions
 
-A responsive digital agency website built with Next.js 14, React, PostgreSQL and Prisma. It includes a premium homepage, all 10 service categories, concept demo showcase, project request wizard, WhatsApp CTAs, client registration/login, client portal with invoices, support tickets and notifications, admin finance/support/project/analytics/consultation modules, SSLCommerz payment initiation and server-side validation, public journal, policy pages, and protected APIs.
+> **আমাদের লাইভ ওয়েবসাইট:**  
+> 🌐 [https://nova29.vercel.app/](https://nova29.vercel.app/)
 
-> **Important:** Demo gallery entries are explicitly concept demonstrations, not claims of completed client work. Public pricing is intentionally omitted. Quotes are private and custom-prepared.
+**NovaLoom Digital Solutions** একটি আধুনিক ও পূর্ণাঙ্গ ডিজিটাল এজেন্সি ওয়েবসাইট। এটি Next.js 14, React, PostgreSQL এবং Prisma ব্যবহার করে তৈরি করা হয়েছে। ওয়েবসাইটটি সম্পূর্ণ Responsive এবং Mobile ও Desktop উভয় ডিভাইসের জন্য উপযোগী।
 
-## Requirements
+## 🌟 প্রজেক্ট পরিচিতি
+
+NovaLoom Digital Solutions-এর মাধ্যমে গ্রাহকরা বিভিন্ন ধরনের ডিজিটাল সেবা দেখতে, প্রজেক্টের জন্য অনুরোধ পাঠাতে, কাস্টম কোটেশন গ্রহণ করতে এবং নিজেদের প্রজেক্টের অগ্রগতি পর্যবেক্ষণ করতে পারবেন।
+
+এই প্রজেক্টে রয়েছে:
+
+- আধুনিক ও Premium Homepage
+- ১০টি ডিজিটাল সার্ভিস ক্যাটাগরি
+- Concept-based Demo Project Gallery
+- Multi-step Project Request Form
+- WhatsApp যোগাযোগ ব্যবস্থা
+- Client Registration ও Login
+- Client Dashboard
+- Invoice ও Payment Management
+- Support Ticket ও Notification System
+- Admin Dashboard
+- Project ও Task Management
+- Blog ও Journal Publishing
+- SSLCommerz Payment Integration
+- Protected API এবং Role-based Access Control
+
+**বিশেষ দ্রষ্টব্য:** Demo Gallery-এর প্রজেক্টগুলো Concept Demonstration। এগুলোকে সম্পন্ন বাস্তব গ্রাহক প্রজেক্ট হিসেবে উপস্থাপন করা হয়নি। Public Pricing দেওয়া হয়নি; প্রতিটি গ্রাহকের জন্য আলাদাভাবে Custom Quotation তৈরি করা হয়।
+
+## 🛠️ ব্যবহৃত প্রযুক্তি (Technology Stack)
+
+| Technology | ব্যবহার |
+|---|---|
+| Next.js 14 | Full-stack Web Framework |
+| React 18 | User Interface |
+| JavaScript | Application Development |
+| Tailwind CSS ও Custom CSS | Responsive Design |
+| PostgreSQL | Database |
+| Prisma ORM | Database Management |
+| JWT ও JOSE | Authentication |
+| bcryptjs | Password Hashing |
+| Framer Motion | Animation |
+| Lucide React | Icons |
+| Vercel | Deployment |
+| Neon | Cloud PostgreSQL Database |
+| SSLCommerz | Online Payment Integration |
+
+## 💻 System Requirements
+
+প্রজেক্টটি চালানোর জন্য প্রয়োজন:
 
 - Node.js 20 LTS
 - npm
-- PostgreSQL database (Neon works)
+- PostgreSQL Database
+- Git
 
-## 1. Install
+Neon Cloud PostgreSQL ব্যবহার করা যাবে।
+
+## ⚙️ Installation Guide
+
+### ১. Repository Clone
+
+```bash
+git clone https://github.com/Mohammad-Towhidul-Islam/novaloom-digital.git
+cd novaloom-digital
+```
+
+### ২. Dependencies Install
 
 ```bash
 npm install
 ```
 
-## 2. Configure environment
+### ৩. Environment Configuration
 
-Copy `.env.example` to `.env` and set:
-
-- `DATABASE_URL`: PostgreSQL connection string (Neon direct connection is recommended for Prisma migrations)
-- `AUTH_SECRET`: a long random secret
-- `NEXT_PUBLIC_WHATSAPP_NUMBER`: WhatsApp business number with country code, digits only
-- `ADMIN_EMAIL` and `ADMIN_PASSWORD`: initial admin account for seeding
-
-Example secret generation:
+প্রজেক্টের `.env.example` ফাইল কপি করে `.env` তৈরি করো।
 
 ```bash
-openssl rand -base64 32
+cp .env.example .env
 ```
 
-## 3. Set up the database
+এরপর প্রয়োজনীয় Environment Variables সেট করো:
+
+```env
+DATABASE_URL="your_postgresql_connection_string"
+
+AUTH_SECRET="your_long_random_secret"
+
+NEXT_PUBLIC_WHATSAPP_NUMBER="your_whatsapp_number"
+
+ADMIN_EMAIL="your_admin_email"
+
+ADMIN_PASSWORD="your_secure_admin_password"
+```
+
+**গুরুত্বপূর্ণ:** Production ব্যবহারের আগে অবশ্যই নিজের Database URL, Secret, WhatsApp Number এবং Admin Credentials বসাতে হবে। কোনো Secret বা Password GitHub-এ প্রকাশ করবে না।
+
+### ৪. Database Setup
+
+Prisma Client তৈরি করো:
 
 ```bash
 npx prisma generate
+```
+
+Database Schema Sync করো:
+
+```bash
 npx prisma db push
+```
+
+Initial Data Seed করো:
+
+```bash
 npm run db:seed
 ```
 
-The seed creates the 10 service categories and initial concept demo entries. If `ADMIN_EMAIL` and `ADMIN_PASSWORD` are configured, it also creates the first administrator.
+Seed Script-এর মাধ্যমে:
 
-## 4. Run locally
+- ১০টি Service Category তৈরি হবে।
+- প্রাথমিক Concept Demo Projects যুক্ত হবে।
+- `ADMIN_EMAIL` এবং `ADMIN_PASSWORD` দেওয়া থাকলে প্রথম Admin Account তৈরি হবে।
+
+### ৫. Local Development Server চালু
 
 ```bash
 npm run dev
 ```
 
-Open http://localhost:3000.
+তারপর Browser-এ খোলো:
 
-## Main routes
+http://localhost:3000
 
-- `/` — homepage
-- `/services` — all services
-- `/services/[slug]` — service details
-- `/work` — filterable concept showcase
-- `/work/[slug]` — concept demo detail
-- `/request` — multi-step project request form
-- `/contact` — consultation request form
-- `/register`, `/login` — authentication
-- `/dashboard` — client portal starting point
-- `/admin` — protected admin request inbox and module shortcuts
-- `/admin/quotations` — create and send private custom quotations
-- `/admin/blog` — publish journal articles
-- `/admin/team` — manage client/staff roles
-- `/admin/finance` — private invoice creation and payment review
-- `/admin/projects` — project status overview
-- `/admin/support` — support ticket management
-- `/admin/consultations` — consultation request management
-- `/admin/analytics` — operational analytics
-- `/blog` and `/blog/[slug]` — published journal articles
-- `/privacy`, `/terms` — policy template pages
+## 📌 Website-এর গুরুত্বপূর্ণ পেজসমূহ
 
-## Included API routes
+| Route | বিবরণ |
+|---|---|
+| `/` | Homepage |
+| `/services` | সকল ডিজিটাল সেবা |
+| `/services/[slug]` | Service Details |
+| `/work` | Demo Project Gallery |
+| `/work/[slug]` | Demo Project Details |
+| `/request` | Project Request Form |
+| `/contact` | যোগাযোগ ও Consultation |
+| `/register` | Client Registration |
+| `/login` | User Login |
+| `/dashboard` | Client Dashboard |
+| `/admin` | Admin Dashboard |
+| `/admin/quotations` | Custom Quotation Management |
+| `/admin/blog` | Blog Management |
+| `/admin/team` | Team ও User Management |
+| `/admin/finance` | Invoice ও Finance Management |
+| `/admin/projects` | Project Management |
+| `/admin/support` | Support Ticket Management |
+| `/admin/consultations` | Consultation Management |
+| `/admin/analytics` | Business Analytics |
+| `/blog` | Public Journal |
+| `/privacy` | Privacy Policy |
+| `/terms` | Terms and Conditions |
 
-- `POST /api/requests` — save project requests
-- `POST /api/consultations` — save consultation requests
-- `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`
-- `GET/POST /api/admin/services` — admin-only service management endpoints
-- `GET/POST /api/admin/demos` — admin-only demo management endpoints
-- `GET/PATCH /api/admin/requests` — admin-only project request inbox and status updates
-- `GET/POST /api/admin/invoices`, `GET /api/client/invoices` — invoice workflow
-- `POST /api/payments/initiate`, `POST /api/payments/sslcommerz/callback` — SSLCommerz checkout and server-side transaction validation
-- `GET/POST/PATCH /api/support/tickets` — client tickets and admin status updates
-- `GET/POST /api/messages` — project-scoped messages with internal-note access control
-- `GET/PATCH /api/notifications` — client notifications
-- `GET/POST/PATCH /api/admin/projects` and `/api/admin/tasks` — project/task foundations
-- `GET/PATCH /api/admin/consultations` — consultation management
-- `GET /api/blog`, `GET /api/blog/[slug]`, `GET/POST/PATCH/DELETE /api/admin/blog` — public journal and admin publishing API
-- `GET /api/admin/analytics` — admin-only business counts
-- `GET /api/admin/activity` — admin-only recent audit trail
-- `GET/PATCH /api/admin/users` — admin user and role management
+## 🔌 API Features
 
-## Deployment (Vercel + Neon)
+প্রজেক্টে নিচের API Endpoints অন্তর্ভুক্ত রয়েছে:
 
-1. Push this project to GitHub.
-2. Create a PostgreSQL database in Neon and copy its connection string.
-3. Import the GitHub repository into Vercel.
-4. Add all `.env.example` variables in Vercel Project Settings → Environment Variables.
-5. Run `npx prisma db push` locally against the production `DATABASE_URL` (or add a controlled migration workflow).
-6. Deploy from Vercel.
-7. Set `NEXT_PUBLIC_SITE_URL` to the deployed URL and confirm the WhatsApp number.
+- Project Request Management
+- Consultation Request Management
+- User Registration ও Authentication
+- Admin Service Management
+- Demo Project Management
+- Project Request Inbox
+- Invoice Management
+- SSLCommerz Payment Initiation ও Callback Validation
+- Support Ticket Management
+- Project Messaging
+- Client Notifications
+- Project ও Task Management
+- Blog Publishing
+- Admin Analytics
+- Activity Logs
+- User ও Role Management
 
-For a production deployment, use a separate migration workflow (`prisma migrate dev` locally, then `prisma migrate deploy` in CI) rather than relying on `db push` for ongoing schema changes.
+Protected API-গুলোতে Authentication ও Authorization ব্যবস্থা রয়েছে।
 
-## Important implementation boundaries
+## 💳 Payment Integration
 
-This v1.1 ZIP adds working database/API foundations and interface screens for quotations, invoices, payment initiation, support, notifications, project chat, milestones/tasks, blog publishing, role assignment and analytics. A few larger production capabilities still need external services or further UI work:
+প্রজেক্টে SSLCommerz Payment Integration-এর ভিত্তি যুক্ত করা হয়েছে।
 
-- Persistent client file uploads are not enabled yet. Configure private S3/R2-compatible storage and signed upload/download URLs before allowing customer files; Vercel local disk is not persistent.
-- The UI is primarily English. A complete Bangla/English localization pass across all public pages, forms, emails and dashboards remains to be done.
-- Staff role values and account assignment are available, but fine-grained per-module permissions and project-assignment enforcement need a security pass.
-- Email is sent only when a valid Resend API key and verified sender are configured. Otherwise requests still save normally and email delivery is skipped.
-- SSLCommerz checkout requires merchant credentials and sandbox testing. The callback validates transaction ID, amount and currency with the provider before marking a payment paid. Test success, failure, cancel, IPN, partial payments and duplicate callbacks before live mode.
-- Project messaging API and client chat are included; richer staff inboxes, attachment sharing and real-time WebSocket delivery are not enabled.
-- Service/demo CRUD APIs exist, but a full visual admin editor for every field still needs completing.
-- The privacy and terms pages are starter templates and must be customized and reviewed for your company.
+এর মধ্যে রয়েছে:
 
-## Before accepting real customers
+- Payment Initiation
+- Hosted Checkout
+- Server-side Transaction Validation
+- Payment Status Management
+- Transaction ID ও Amount Verification
 
-This is a substantial project foundation, not a substitute for a final production security review. Before launch:
+**গুরুত্বপূর্ণ:** বাস্তব Payment চালুর আগে SSLCommerz Merchant Credentials যুক্ত করতে হবে এবং Sandbox Environment-এ Success, Failure, Cancel, IPN, Refund ও Duplicate Callback পরীক্ষা করতে হবে।
 
-- Replace the placeholder WhatsApp number and email address.
-- Add rate limiting and bot protection to public forms and authentication endpoints.
-- Add email delivery for request confirmations and admin notifications.
-- Add secure private object storage (S3/R2 or equivalent) for client file uploads; do not use local disk on Vercel for persistent files.
-- Add a complete project chat interface and richer milestone/task editing screens. The project-scoped messaging API is included as a foundation.
-- Admin blog editor and public journal pages are included.
-- Optional email confirmations use Resend when `RESEND_API_KEY` and a verified `EMAIL_FROM` are configured.
-- Add admin CRUD screens for service and demo management (protected APIs are included).
-- Extend staff permissions beyond the current admin-only management screens.
-- Add rate limiting, CAPTCHA/bot protection, and CSRF/origin checks where applicable.
-- Test SSLCommerz sandbox callbacks, IPN behavior, refunds and partial payments with merchant credentials before enabling live mode.
-- Add automated tests, production build verification, monitoring and scheduled database backups.
-- Add privacy policy, terms, cookie notice and data retention controls.
-- Replace concept demo images/content with your own work or licensed assets before representing them as portfolio projects.
+## 🚀 Deployment (Vercel + Neon)
 
-## Added business modules
+NovaLoom Digital Solutions Vercel ও Neon PostgreSQL ব্যবহার করে Deploy করা যায়।
 
-- Private invoices are created against a project request in `/admin/finance`.
-- Clients can see invoices, submit support tickets, read notifications and start SSLCommerz checkout from `/dashboard`.
-- SSLCommerz callbacks are verified against the provider validation endpoint before marking a payment as paid. Configure real merchant credentials before testing.
-- Accepting a quotation for a signed-in client creates a project workspace.
-- Support tickets, project-scoped messages, notifications, tasks, activity logs, blog posts and testimonials have database models.
-- Public journal and privacy/terms template pages are included. Replace template legal copy with reviewed company policies.
+Deployment-এর ধাপ:
 
-## Images
+1. Project GitHub-এ Push করতে হবে।
+2. Neon-এ PostgreSQL Database তৈরি করতে হবে।
+3. Neon Connection String সংগ্রহ করতে হবে।
+4. GitHub Repository Vercel-এ Import করতে হবে।
+5. Vercel Environment Variables-এ প্রয়োজনীয় Configuration যোগ করতে হবে।
+6. Production Database-এ Prisma Schema Sync করতে হবে।
+7. Vercel থেকে Build ও Deploy করতে হবে।
+8. Deployment URL এবং WhatsApp Configuration যাচাই করতে হবে।
 
-The starter uses remote Unsplash image URLs for visual placeholders. Internet access is required for those images to load. Replace them with your own optimized images before production. The Next.js image configuration already allows `images.unsplash.com`.
+Production Environment-এর জন্য প্রয়োজনীয় Variables:
+
+- `DATABASE_URL`
+- `AUTH_SECRET`
+- `NEXT_PUBLIC_WHATSAPP_NUMBER`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+
+অতিরিক্ত Email ও Payment Integration ব্যবহার করলে সংশ্লিষ্ট API Keys এবং Credentials-ও যোগ করতে হবে।
+
+Production-এ নিয়মিত Schema পরিবর্তনের জন্য Migration Workflow ব্যবহার করা উত্তম:
+
+```bash
+npx prisma migrate dev
+npx prisma migrate deploy
+```
+
+## 🗄️ Database Modules
+
+এই প্রজেক্টে Prisma-এর মাধ্যমে নিচের Database Models ব্যবহার করা হয়েছে:
+
+- User
+- ServiceCategory
+- DemoProject
+- ProjectRequest
+- Quotation
+- Project
+- Milestone
+- Consultation
+- Invoice
+- Payment
+- SupportTicket
+- Message
+- Notification
+- Task
+- ActivityLog
+- BlogPost
+- Testimonial
+
+## 🔐 Security Features
+
+প্রজেক্টে রয়েছে:
+
+- Password Hashing
+- JWT-based Authentication
+- HTTP-only Session Cookies
+- Admin Protected Routes
+- Role-based Access Control
+- Server-side Payment Validation
+- Project-scoped Messaging Access Control
+
+তবে বাস্তব গ্রাহক ব্যবহারের আগে সম্পূর্ণ Security Review প্রয়োজন।
+
+## ⚠️ Production-এর আগে আরও যেসব কাজ প্রয়োজন
+
+এটি একটি পূর্ণাঙ্গ Project Foundation হলেও কিছু Production Feature-এর জন্য অতিরিক্ত Configuration ও Development প্রয়োজন।
+
+১. Customer File Upload-এর জন্য Private S3/R2 Storage এবং Signed URL যুক্ত করতে হবে।
+
+২. Public Forms ও Authentication-এর জন্য Rate Limiting এবং CAPTCHA/Bot Protection যুক্ত করতে হবে।
+
+৩. Client ও Admin Email Notification-এর জন্য Resend API এবং Verified Sender Configuration করতে হবে।
+
+৪. Staff Role-এর জন্য আরও বিস্তারিত Permission ও Project Assignment Security যুক্ত করতে হবে।
+
+৫. Project Chat-এর জন্য উন্নত Inbox এবং Real-time WebSocket Delivery যুক্ত করতে হবে।
+
+৬. Service ও Demo Management-এর জন্য সম্পূর্ণ Visual Admin Editor তৈরি করতে হবে।
+
+৭. Privacy Policy, Terms এবং Data Retention Policy নিজের প্রতিষ্ঠানের প্রয়োজন অনুযায়ী সংশোধন করতে হবে।
+
+৮. SSLCommerz Sandbox Testing সম্পন্ন করে তারপর Live Payment চালু করতে হবে।
+
+৯. Automated Testing, Monitoring এবং Database Backup নিশ্চিত করতে হবে।
+
+১০. Concept Demo-এর পরিবর্তে বাস্তব Portfolio Content ব্যবহারের আগে যথাযথ অনুমতি ও Licensed Assets নিশ্চিত করতে হবে।
+
+## 📸 Images & Assets
+
+প্রজেক্টে প্রাথমিক Visual Content-এর জন্য Unsplash-এর Remote Image URL ব্যবহার করা হয়েছে।
+
+নিজস্ব ছবি ও Optimized Assets ব্যবহার করে Website-এর Visual Quality আরও উন্নত করা যাবে। Next.js Configuration-এ `images.unsplash.com` অনুমোদিত রয়েছে।
+
+## 🎯 Project Vision
+
+NovaLoom Digital Solutions-এর লক্ষ্য হলো একটি নির্ভরযোগ্য ডিজিটাল প্ল্যাটফর্ম তৈরি করা, যেখানে ব্যক্তি ও প্রতিষ্ঠান সহজেই তাদের প্রয়োজনীয় Website, Software, Mobile Application এবং অন্যান্য Digital Solutions পেতে পারে।
+
+আমরা প্রযুক্তি, সৃজনশীলতা এবং আধুনিক ডিজাইনের সমন্বয়ে ডিজিটাল অভিজ্ঞতা উন্নত করতে কাজ করছি।
+
+---
+
+**Developed with ❤️ by NovaLoom Digital Solutions**
+
+🌐 **Live Website:** [https://nova29.vercel.app/](https://nova29.vercel.app/)
+
+💻 **GitHub Repository:** [NovaLoom Digital](https://github.com/Mohammad-Towhidul-Islam/novaloom-digital)
