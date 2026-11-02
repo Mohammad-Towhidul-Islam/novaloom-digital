@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import {ArrowUpRight,Sparkles,MessageCircle} from 'lucide-react';
+export default function Footer(){
+ const wa=(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER||'8801XXXXXXXXX').replace(/\D/g,'');
+ return <footer className="footer"><div className="container"><div className="footer-top"><div><Link href="/" className="brand footer-brand"><span className="brand-mark"><Sparkles size={18}/></span><span>nova<span className="brand-accent">loom</span><small>ডিজিটাল সলিউশনস</small></span></Link><p>আপনার সব ডিজিটাল প্রয়োজনের নির্ভরযোগ্য সহযোগী।<br/>আপনার আইডিয়াকে কার্যকর ডিজিটাল অভিজ্ঞতায় রূপ দিই।</p></div><div className="footer-cta"><span className="eyebrow">বড় কোনো পরিকল্পনা আছে?</span><h2>চলুন একসঙ্গে<br/><em>বাস্তবায়ন করি।</em></h2><Link className="button" href="/request">আপনার কাজের কথা জানান <ArrowUpRight size={16}/></Link></div></div><div className="footer-bottom"><span>© {new Date().getFullYear()} NovaLoom Digital. সর্বস্বত্ব সংরক্ষিত।</span><div><Link href="/services">সেবাসমূহ</Link><Link href="/work">আমাদের কাজ</Link><Link href="/blog">ব্লগ</Link><Link href="/contact">যোগাযোগ</Link><Link href="/privacy">গোপনীয়তা</Link><Link href="/terms">শর্তাবলি</Link><a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer"><MessageCircle size={14}/> WhatsApp</a></div></div></div></footer>;
+}

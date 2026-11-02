@@ -1,0 +1,4 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import {ArrowUpRight,Eye} from 'lucide-react';
+export default function DemoCard({demo}){return <article className="demo-card"><Link href={`/work/${demo.slug}`} className="demo-image"><Image src={demo.image} alt={demo.title} fill sizes="(max-width: 700px) 90vw, 45vw"/><span className="demo-view"><Eye size={15}/> নমুনা দেখুন</span></Link><div className="demo-info"><div><span className="eyebrow">{demo.category}</span><h3>{demo.title}</h3><p>{demo.description}</p></div><Link href={`/work/${demo.slug}`} className="round-arrow" aria-label={`${demo.title} দেখুন`}><ArrowUpRight/></Link></div><div className="tag-row">{(demo.tags||demo.technologies||[]).slice(0,3).map(t=><span key={t}>{t}</span>)}{demo.concept!==false&&<span className="concept-tag">নমুনা ডিজাইন</span>}</div></article>}

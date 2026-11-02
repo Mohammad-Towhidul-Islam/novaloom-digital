@@ -1,0 +1,2 @@
+import { MessageCircle } from 'lucide-react';
+export default function WhatsApp(){const n=(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER||'8801XXXXXXXXX').replace(/\D/g,'');return <a className="whatsapp-float" href={`https://wa.me/${n}?text=${encodeURIComponent('Hello NovaLoom, I would like to discuss a project.')}`} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp"><MessageCircle size={22}/></a>}
