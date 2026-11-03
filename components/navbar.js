@@ -1,28 +1,35 @@
+
 'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Globe } from 'lucide-react';
 import { useSite } from './site-provider';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const { user } = useSite();
+  const { user, lang, setLang } = useSite();
+
+  const isBn = lang === 'bn';
 
   const links = [
-    ['সেবাসমূহ', '/services'],
-    ['আমাদের কাজ', '/work'],
-    ['ব্লগ', '/blog'],
-    ['কাজের ধাপ', '/#process'],
-    ['আমাদের সম্পর্কে', '/#about']
+    [isBn ? 'সেবাসমূহ' : 'Services', '/services'],
+    [isBn ? 'আমাদের কাজ' : 'Our Work', '/work'],
+    [isBn ? 'ব্লগ' : 'Blog', '/blog'],
+    [isBn ? 'কাজের ধাপ' : 'Process', '/#process'],
+    [isBn ? 'আমাদের সম্পর্কে' : 'About Us', '/#about'],
   ];
+
+  const switchLanguage = () => {
+    setLang(isBn ? 'en' : 'bn');
+    setOpen(false);
+  };
 
   return (
     <header className="nav-wrap">
       <nav className="nav container">
 
-        {/* NovaLoom Logo */}
         <Link
           href="/"
           className="brand"
@@ -39,34 +46,50 @@ export default function Navbar() {
 
           <span className="brand-text">
             nova<span className="brand-accent">loom</span>
-            <small>ডিজিটাল সলিউশনস</small>
+            <small>
+              {isBn ? 'ডিজিটাল সলিউশনস' : 'Digital Solutions'}
+            </small>
           </span>
         </Link>
 
         <div className="nav-links">
-          {links.map(([n, h]) => (
-            <Link key={n} href={h}>
-              {n}
+          {links.map(([name, href]) => (
+            <Link key={href} href={href}>
+              {name}
             </Link>
           ))}
         </div>
 
         <div className="nav-actions">
+
+          <button
+            type="button"
+            className="language-switch"
+            onClick={switchLanguage}
+            aria-label="Change language"
+          >
+            <Globe size={15} />
+            {isBn ? 'English' : 'বাংলা'}
+          </button>
+
           <Link
             className="nav-login"
             href={user ? '/dashboard' : '/login'}
           >
-            {user ? 'ড্যাশবোর্ড' : 'লগইন'}
+            {user
+              ? (isBn ? 'ড্যাশবোর্ড' : 'Dashboard')
+              : (isBn ? 'লগইন' : 'Login')}
           </Link>
 
           <Link className="button button-small" href="/request">
-            সেবা বুক করুন <ArrowUpRight size={15} />
+            {isBn ? 'সেবা বুক করুন' : 'Get Started'}
+            <ArrowUpRight size={15} />
           </Link>
         </div>
 
         <button
           className="menu-toggle"
-          aria-label="মেনু খুলুন"
+          aria-label={isBn ? 'মেনু খুলুন' : 'Open menu'}
           onClick={() => setOpen(!open)}
         >
           {open ? <X /> : <Menu />}
@@ -75,21 +98,32 @@ export default function Navbar() {
 
       {open && (
         <div className="mobile-menu">
-          {links.map(([n, h]) => (
+          {links.map(([name, href]) => (
             <Link
-              key={n}
-              href={h}
+              key={href}
+              href={href}
               onClick={() => setOpen(false)}
             >
-              {n}
+              {name}
             </Link>
           ))}
+
+          <button
+            type="button"
+            className="language-switch"
+            onClick={switchLanguage}
+          >
+            <Globe size={16} />
+            {isBn ? 'Switch to English' : 'বাংলায় দেখুন'}
+          </button>
 
           <Link
             href={user ? '/dashboard' : '/login'}
             onClick={() => setOpen(false)}
           >
-            {user ? 'ড্যাশবোর্ড' : 'লগইন'}
+            {user
+              ? (isBn ? 'ড্যাশবোর্ড' : 'Dashboard')
+              : (isBn ? 'লগইন' : 'Login')}
           </Link>
 
           <Link
@@ -97,7 +131,8 @@ export default function Navbar() {
             href="/request"
             onClick={() => setOpen(false)}
           >
-            সেবা বুক করুন <ArrowUpRight size={16} />
+            {isBn ? 'সেবা বুক করুন' : 'Get Started'}
+            <ArrowUpRight size={16} />
           </Link>
         </div>
       )}

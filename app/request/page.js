@@ -3,7 +3,9 @@
 
 import { useEffect, useState } from 'react';
 import SiteShell from '@/components/site-shell';
+import { useSite } from '@/components/site-provider';
 import { services } from '@/lib/catalog';
+
 import {
   ArrowRight,
   ArrowLeft,
@@ -12,21 +14,24 @@ import {
 } from 'lucide-react';
 
 const options = [
-  'ইউজার রেজিস্ট্রেশন ও লগইন',
-  'অ্যাডমিন ড্যাশবোর্ড',
-  'কাস্টমার ড্যাশবোর্ড',
-  'পেমেন্ট সিস্টেম',
-  'পণ্য বা কনটেন্ট ব্যবস্থাপনা',
-  'বুকিং সিস্টেম',
-  'সার্চ ও ফিল্টার',
-  'ডেটাবেস ব্যবস্থাপনা',
-  'এপিআই সংযুক্তকরণ',
-  'নোটিফিকেশন',
-  'এআই ফিচার',
-  'অন্যান্য কাস্টম ফিচার',
+  { value: 'ইউজার রেজিস্ট্রেশন ও লগইন', en: 'User Registration & Login' },
+  { value: 'অ্যাডমিন ড্যাশবোর্ড', en: 'Admin Dashboard' },
+  { value: 'কাস্টমার ড্যাশবোর্ড', en: 'Customer Dashboard' },
+  { value: 'পেমেন্ট সিস্টেম', en: 'Payment System' },
+  { value: 'পণ্য বা কনটেন্ট ব্যবস্থাপনা', en: 'Product & Content Management' },
+  { value: 'বুকিং সিস্টেম', en: 'Booking System' },
+  { value: 'সার্চ ও ফিল্টার', en: 'Search & Filter' },
+  { value: 'ডেটাবেস ব্যবস্থাপনা', en: 'Database Management' },
+  { value: 'এপিআই সংযুক্তকরণ', en: 'API Integration' },
+  { value: 'নোটিফিকেশন', en: 'Notifications' },
+  { value: 'এআই ফিচার', en: 'AI Features' },
+  { value: 'অন্যান্য কাস্টম ফিচার', en: 'Other Custom Features' },
 ];
 
 export default function RequestPage() {
+  const { lang } = useSite();
+  const en = lang === 'en';
+
   const [step, setStep] = useState(1);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(null);
@@ -66,6 +71,7 @@ export default function RequestPage() {
     }));
 
     setError('');
+
     setFieldErrors((previous) => ({
       ...previous,
       [key]: undefined,
@@ -81,24 +87,39 @@ export default function RequestPage() {
     );
   };
 
+  const fieldError = (field) => {
+    const messages = fieldErrors[field];
+    return Array.isArray(messages) ? messages[0] : '';
+  };
+
   function validateStep() {
     setError('');
 
-    if (step === 1) {
-      if (!form.serviceSlugs.length) {
-        setError('অনুগ্রহ করে অন্তত একটি সেবা নির্বাচন করুন।');
-        return false;
-      }
+    if (step === 1 && !form.serviceSlugs.length) {
+      setError(
+        en
+          ? 'Please select at least one service.'
+          : 'অনুগ্রহ করে অন্তত একটি সেবা নির্বাচন করুন।'
+      );
+      return false;
     }
 
     if (step === 2) {
       if (form.title.trim().length < 2) {
-        setError('প্রজেক্টের নাম কমপক্ষে ২ অক্ষরের হতে হবে।');
+        setError(
+          en
+            ? 'Project name must contain at least 2 characters.'
+            : 'প্রজেক্টের নাম কমপক্ষে ২ অক্ষরের হতে হবে।'
+        );
         return false;
       }
 
       if (form.description.trim().length < 10) {
-        setError('কাজের বিস্তারিত কমপক্ষে ১০ অক্ষরে লিখুন।');
+        setError(
+          en
+            ? 'Please describe your project in at least 10 characters.'
+            : 'কাজের বিস্তারিত কমপক্ষে ১০ অক্ষরে লিখুন।'
+        );
         return false;
       }
     }
@@ -108,7 +129,6 @@ export default function RequestPage() {
 
   function nextStep() {
     if (!validateStep()) return;
-
     setStep((previous) => previous + 1);
   }
 
@@ -140,31 +160,51 @@ export default function RequestPage() {
     // Frontend validation
     if (payload.clientName.length < 2) {
       setStep(3);
-      setError('আপনার পুরো নাম কমপক্ষে ২ অক্ষরের হতে হবে।');
+      setError(
+        en
+          ? 'Your full name must contain at least 2 characters.'
+          : 'আপনার পুরো নাম কমপক্ষে ২ অক্ষরের হতে হবে।'
+      );
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
       setStep(3);
-      setError('সঠিক ইমেইল ঠিকানা লিখুন।');
+      setError(
+        en
+          ? 'Please enter a valid email address.'
+          : 'সঠিক ইমেইল ঠিকানা লিখুন।'
+      );
       return;
     }
 
     if (!payload.serviceSlugs.length) {
       setStep(1);
-      setError('অন্তত একটি সেবা নির্বাচন করুন।');
+      setError(
+        en
+          ? 'Please select at least one service.'
+          : 'অন্তত একটি সেবা নির্বাচন করুন।'
+      );
       return;
     }
 
     if (payload.title.length < 2) {
       setStep(2);
-      setError('প্রজেক্টের নাম কমপক্ষে ২ অক্ষরের হতে হবে।');
+      setError(
+        en
+          ? 'Project name must contain at least 2 characters.'
+          : 'প্রজেক্টের নাম কমপক্ষে ২ অক্ষরের হতে হবে।'
+      );
       return;
     }
 
     if (payload.description.length < 10) {
       setStep(2);
-      setError('কাজের বিস্তারিত কমপক্ষে ১০ অক্ষরে লিখুন।');
+      setError(
+        en
+          ? 'Project description must contain at least 10 characters.'
+          : 'কাজের বিস্তারিত কমপক্ষে ১০ অক্ষরে লিখুন।'
+      );
       return;
     }
 
@@ -197,7 +237,9 @@ export default function RequestPage() {
           const firstInvalidField = Object.keys(data.fieldErrors)[0];
 
           if (
-            ['title', 'description', 'referenceUrl'].includes(firstInvalidField)
+            ['title', 'description', 'referenceUrl'].includes(
+              firstInvalidField
+            )
           ) {
             setStep(2);
           } else if (
@@ -223,53 +265,70 @@ export default function RequestPage() {
           : '';
 
         throw new Error(
-          details || data.error || 'অনুরোধ জমা দেওয়া যায়নি। আবার চেষ্টা করুন।'
+          details ||
+            (en
+              ? 'Unable to submit your request. Please try again.'
+              : data.error || 'অনুরোধ জমা দেওয়া যায়নি। আবার চেষ্টা করুন।')
         );
       }
 
       setDone(data.requestCode);
     } catch (err) {
       console.error('Request submission failed:', err);
-      setError(err.message || 'একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+
+      setError(
+        err.message ||
+          (en
+            ? 'Something went wrong. Please try again.'
+            : 'একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।')
+      );
     } finally {
       setBusy(false);
     }
   }
 
-  const fieldError = (field) => {
-    const messages = fieldErrors[field];
-    return Array.isArray(messages) ? messages[0] : '';
-  };
+  const whatsappNumber = (
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '8801XXXXXXXXX'
+  ).replace(/\D/g, '');
 
   return (
     <SiteShell>
       <main className="form-page">
         <div className="form-container">
+
+          {/* LEFT INTRO */}
           <div className="form-intro">
             <span className="eyebrow">
               <span className="eyebrow-line" />
-              আপনার সেবার অনুরোধ পাঠান
+              {en ? 'SEND YOUR PROJECT REQUEST' : 'আপনার সেবার অনুরোধ পাঠান'}
             </span>
 
             <h1>
-              আপনার আইডিয়াকে
+              {en ? 'Your Ideas' : 'আপনার আইডিয়াকে'}
               <br />
-              <em>বাস্তব রূপ দিই।</em>
+              <em>
+                {en ? 'Into Reality.' : 'বাস্তব রূপ দিই।'}
+              </em>
             </h1>
 
             <p>
-              আপনার কী ধরনের কাজ প্রয়োজন, সংক্ষেপে জানান।
-              আমরা অনুরোধটি পর্যালোচনা করে যোগাযোগ করব।
+              {en
+                ? 'Tell us briefly what kind of work you need. We will review your request and get in touch with you.'
+                : 'আপনার কী ধরনের কাজ প্রয়োজন, সংক্ষেপে জানান। আমরা অনুরোধটি পর্যালোচনা করে যোগাযোগ করব।'}
             </p>
 
             <div className="form-promise">
               <CheckCircle2 />
-              এখানে নির্দিষ্ট প্যাকেজ মূল্য নেই।
-              কাজের ধরন বুঝে আলোচনা করে কাস্টম মূল্য জানানো হবে।
+              {en
+                ? 'No fixed package pricing. We will discuss your requirements and provide a customized quotation.'
+                : 'এখানে নির্দিষ্ট প্যাকেজ মূল্য নেই। কাজের ধরন বুঝে আলোচনা করে কাস্টম মূল্য জানানো হবে।'}
             </div>
           </div>
 
+          {/* FORM CARD */}
           <div className="request-card">
+
+            {/* SUCCESS SCREEN */}
             {done ? (
               <div className="success-state">
                 <div className="success-icon">
@@ -277,39 +336,49 @@ export default function RequestPage() {
                 </div>
 
                 <span className="eyebrow">
-                  অনুরোধ গ্রহণ করা হয়েছে
+                  {en ? 'REQUEST RECEIVED' : 'অনুরোধ গ্রহণ করা হয়েছে'}
                 </span>
 
                 <h2>
-                  ধন্যবাদ।
-                  <em> আমরা আপনার অনুরোধটি দেখছি।</em>
+                  {en ? 'Thank You.' : 'ধন্যবাদ।'}
+                  <em>
+                    {en
+                      ? ' We are reviewing your request.'
+                      : ' আমরা আপনার অনুরোধটি দেখছি।'}
+                  </em>
                 </h2>
 
                 <p>
-                  আপনার অনুরোধ নম্বর:
+                  {en ? 'Your Request Number:' : 'আপনার অনুরোধ নম্বর:'}
                   <b> {done}</b>
                 </p>
 
                 <a
                   className="button"
-                  href={`https://wa.me/${(
-                    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ||
-                    '8801XXXXXXXXX'
-                  ).replace(/\D/g, '')}?text=${encodeURIComponent(
-                    `Hello, I submitted project request ${done}. I'd like to discuss it.`
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                    en
+                      ? `Hello, I submitted project request ${done}. I'd like to discuss it.`
+                      : `হ্যালো, আমি ${done} নম্বর প্রজেক্ট অনুরোধ জমা দিয়েছি। এ বিষয়ে আলোচনা করতে চাই।`
                   )}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  WhatsApp-এ কথা বলুন
+                  {en ? 'Contact Us on WhatsApp' : 'WhatsApp-এ কথা বলুন'}
+                  <ArrowRight size={16} />
                 </a>
               </div>
             ) : (
               <>
+                {/* STEP HEADER */}
                 <div className="step-head">
                   <div>
-                    <span className="eyebrow">কাজের বিবরণ</span>
-                    <h2>কাজের বিস্তারিত জানি</h2>
+                    <span className="eyebrow">
+                      {en ? 'PROJECT DETAILS' : 'কাজের বিবরণ'}
+                    </span>
+
+                    <h2>
+                      {en ? 'Tell Us About Your Project' : 'কাজের বিস্তারিত জানি'}
+                    </h2>
                   </div>
 
                   <span className="step-count">
@@ -325,6 +394,7 @@ export default function RequestPage() {
                   />
                 </div>
 
+                {/* ERROR MESSAGE */}
                 {error && (
                   <div
                     role="alert"
@@ -346,11 +416,20 @@ export default function RequestPage() {
                 )}
 
                 <form onSubmit={submit}>
+
+                  {/* STEP 1: SERVICES */}
                   {step === 1 && (
                     <div className="form-step">
                       <label>
-                        আপনার কী ধরনের সেবা প্রয়োজন?
-                        <small>এক বা একাধিক বেছে নিন</small>
+                        {en
+                          ? 'What Services Do You Need?'
+                          : 'আপনার কী ধরনের সেবা প্রয়োজন?'}
+
+                        <small>
+                          {en
+                            ? 'Select one or more services'
+                            : 'এক বা একাধিক বেছে নিন'}
+                        </small>
                       </label>
 
                       <div className="service-select-grid">
@@ -368,7 +447,10 @@ export default function RequestPage() {
                             }
                           >
                             <span>{service.number}</span>
-                            {service.title}
+
+                            {en
+                              ? service.titleEn || service.title
+                              : service.title}
 
                             {form.serviceSlugs.includes(service.slug) && (
                               <CheckCircle2 size={16} />
@@ -378,46 +460,60 @@ export default function RequestPage() {
                       </div>
 
                       <label>
-                        কাজের ধরন <span>(optional)</span>
+                        {en ? 'Project Type' : 'কাজের ধরন'}
+                        <span> ({en ? 'optional' : 'ঐচ্ছিক'})</span>
 
                         <input
                           value={form.projectType}
                           onChange={(e) =>
                             update('projectType', e.target.value)
                           }
-                          placeholder="যেমন: ব্যবসায়িক ওয়েবসাইট..."
+                          placeholder={
+                            en
+                              ? 'e.g. Business Website...'
+                              : 'যেমন: ব্যবসায়িক ওয়েবসাইট...'
+                          }
                         />
                       </label>
                     </div>
                   )}
 
+                  {/* STEP 2: FEATURES */}
                   {step === 2 && (
                     <div className="form-step">
                       <label>
-                        কী কী ফিচার প্রয়োজন?
-                        <small>প্রযোজ্য সবগুলো বেছে নিন</small>
+                        {en ? 'What Features Do You Need?' : 'কী কী ফিচার প্রয়োজন?'}
+
+                        <small>
+                          {en
+                            ? 'Select all that apply'
+                            : 'প্রযোজ্য সবগুলো বেছে নিন'}
+                        </small>
                       </label>
 
                       <div className="feature-options">
                         {options.map((option) => (
                           <button
                             type="button"
-                            key={option}
+                            key={option.value}
                             className={
-                              form.features.includes(option)
+                              form.features.includes(option.value)
                                 ? 'feature-option selected'
                                 : 'feature-option'
                             }
-                            onClick={() => toggle('features', option)}
+                            onClick={() =>
+                              toggle('features', option.value)
+                            }
                           >
-                            {form.features.includes(option) ? '✓' : '+'}
-                            {' '}{option}
+                            {form.features.includes(option.value) ? '✓' : '+'}
+                            {' '}
+                            {en ? option.en : option.value}
                           </button>
                         ))}
                       </div>
 
                       <label>
-                        প্রজেক্টের নাম
+                        {en ? 'Project Name' : 'প্রজেক্টের নাম'}
 
                         <input
                           required
@@ -426,7 +522,11 @@ export default function RequestPage() {
                           onChange={(e) =>
                             update('title', e.target.value)
                           }
-                          placeholder="যেমন: Business Website"
+                          placeholder={
+                            en
+                              ? 'e.g. Business Website'
+                              : 'যেমন: Business Website'
+                          }
                         />
 
                         {fieldError('title') && (
@@ -437,7 +537,9 @@ export default function RequestPage() {
                       </label>
 
                       <label>
-                        আপনার কাজের বিস্তারিত লিখুন
+                        {en
+                          ? 'Describe Your Project'
+                          : 'আপনার কাজের বিস্তারিত লিখুন'}
 
                         <textarea
                           required
@@ -447,12 +549,21 @@ export default function RequestPage() {
                           onChange={(e) =>
                             update('description', e.target.value)
                           }
-                          placeholder="আপনার লক্ষ্য, ব্যবহারকারী, প্রয়োজনীয় ফিচার ও অন্যান্য তথ্য লিখুন..."
+                          placeholder={
+                            en
+                              ? 'Describe your goals, users, required features, and other details...'
+                              : 'আপনার লক্ষ্য, ব্যবহারকারী, প্রয়োজনীয় ফিচার ও অন্যান্য তথ্য লিখুন...'
+                          }
                         />
 
                         <small>
-                          কমপক্ষে ১০টি অক্ষর লিখুন।
-                          বর্তমান অক্ষর: {form.description.trim().length}
+                          {en
+                            ? 'Write at least 10 characters.'
+                            : 'কমপক্ষে ১০টি অক্ষর লিখুন।'}
+                          {' '}
+                          {en ? 'Current characters:' : 'বর্তমান অক্ষর:'}
+                          {' '}
+                          {form.description.trim().length}
                         </small>
 
                         {fieldError('description') && (
@@ -463,7 +574,8 @@ export default function RequestPage() {
                       </label>
 
                       <label>
-                        উদাহরণ ওয়েবসাইট <span>(optional)</span>
+                        {en ? 'Reference Website' : 'উদাহরণ ওয়েবসাইট'}
+                        <span> ({en ? 'optional' : 'ঐচ্ছিক'})</span>
 
                         <input
                           value={form.referenceUrl}
@@ -476,13 +588,18 @@ export default function RequestPage() {
                     </div>
                   )}
 
+                  {/* STEP 3: CONTACT */}
                   {step === 3 && (
                     <div className="form-step">
-                      <label>আপনার যোগাযোগের তথ্য</label>
+                      <label>
+                        {en
+                          ? 'Your Contact Information'
+                          : 'আপনার যোগাযোগের তথ্য'}
+                      </label>
 
                       <div className="two-fields">
                         <label>
-                          আপনার পুরো নাম
+                          {en ? 'Full Name' : 'আপনার পুরো নাম'}
 
                           <input
                             required
@@ -491,7 +608,9 @@ export default function RequestPage() {
                             onChange={(e) =>
                               update('clientName', e.target.value)
                             }
-                            placeholder="আপনার নাম"
+                            placeholder={
+                              en ? 'Your full name' : 'আপনার নাম'
+                            }
                           />
 
                           {fieldError('clientName') && (
@@ -502,7 +621,7 @@ export default function RequestPage() {
                         </label>
 
                         <label>
-                          ইমেইল ঠিকানা
+                          {en ? 'Email Address' : 'ইমেইল ঠিকানা'}
 
                           <input
                             type="email"
@@ -524,7 +643,7 @@ export default function RequestPage() {
 
                       <div className="two-fields">
                         <label>
-                          ফোন / WhatsApp
+                          {en ? 'Phone / WhatsApp' : 'ফোন / WhatsApp'}
 
                           <input
                             value={form.phone}
@@ -536,34 +655,48 @@ export default function RequestPage() {
                         </label>
 
                         <label>
-                          প্রতিষ্ঠানের নাম <span>(optional)</span>
+                          {en ? 'Company Name' : 'প্রতিষ্ঠানের নাম'}
+                          <span> ({en ? 'optional' : 'ঐচ্ছিক'})</span>
 
                           <input
                             value={form.businessName}
                             onChange={(e) =>
                               update('businessName', e.target.value)
                             }
-                            placeholder="আপনার প্রতিষ্ঠানের নাম"
+                            placeholder={
+                              en
+                                ? 'Your company name'
+                                : 'আপনার প্রতিষ্ঠানের নাম'
+                            }
                           />
                         </label>
                       </div>
 
                       <div className="two-fields">
                         <label>
-                          কাজ শেষের সম্ভাব্য সময়
-                          <span>(optional)</span>
+                          {en
+                            ? 'Expected Completion Time'
+                            : 'কাজ শেষের সম্ভাব্য সময়'}
+
+                          <span> ({en ? 'optional' : 'ঐচ্ছিক'})</span>
 
                           <input
                             value={form.deadline}
                             onChange={(e) =>
                               update('deadline', e.target.value)
                             }
-                            placeholder="যেমন: ২ মাসের মধ্যে"
+                            placeholder={
+                              en
+                                ? 'e.g. Within 2 months'
+                                : 'যেমন: ২ মাসের মধ্যে'
+                            }
                           />
                         </label>
 
                         <label>
-                          যোগাযোগের পছন্দের মাধ্যম
+                          {en
+                            ? 'Preferred Communication Method'
+                            : 'যোগাযোগের পছন্দের মাধ্যম'}
 
                           <select
                             value={form.communication}
@@ -571,22 +704,27 @@ export default function RequestPage() {
                               update('communication', e.target.value)
                             }
                           >
-                            <option>WhatsApp</option>
-                            <option>Email</option>
-                            <option>Phone</option>
-                            <option>অনলাইন মিটিং</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Email">Email</option>
+                            <option value="Phone">
+                              {en ? 'Phone' : 'ফোন'}
+                            </option>
+                            <option value="অনলাইন মিটিং">
+                              {en ? 'Online Meeting' : 'অনলাইন মিটিং'}
+                            </option>
                           </select>
                         </label>
                       </div>
 
                       <p className="privacy-note">
-                        এই তথ্য শুধু আপনার অনুরোধের বিষয়ে যোগাযোগের
-                        জন্য ব্যবহার করা হবে। এখনই বাজেট দেওয়ার
-                        প্রয়োজন নেই।
+                        {en
+                          ? 'Your information will only be used to contact you about your request. You do not need to provide a budget now.'
+                          : 'এই তথ্য শুধু আপনার অনুরোধের বিষয়ে যোগাযোগের জন্য ব্যবহার করা হবে। এখনই বাজেট দেওয়ার প্রয়োজন নেই।'}
                       </p>
                     </div>
                   )}
 
+                  {/* NAVIGATION BUTTONS */}
                   <div className="form-nav">
                     {step > 1 && (
                       <button
@@ -596,7 +734,7 @@ export default function RequestPage() {
                         disabled={busy}
                       >
                         <ArrowLeft size={16} />
-                        পেছনে যান
+                        {en ? 'Previous' : 'পেছনে যান'}
                       </button>
                     )}
 
@@ -610,7 +748,7 @@ export default function RequestPage() {
                           form.serviceSlugs.length === 0
                         }
                       >
-                        পরবর্তী ধাপ
+                        {en ? 'Next Step' : 'পরবর্তী ধাপ'}
                         <ArrowRight size={16} />
                       </button>
                     ) : (
@@ -620,8 +758,13 @@ export default function RequestPage() {
                         disabled={busy}
                       >
                         {busy
-                          ? 'জমা দেওয়া হচ্ছে...'
-                          : 'অনুরোধ জমা দিন'}
+                          ? en
+                            ? 'Submitting...'
+                            : 'জমা দেওয়া হচ্ছে...'
+                          : en
+                            ? 'Submit Request'
+                            : 'অনুরোধ জমা দিন'}
+
                         <ArrowRight size={16} />
                       </button>
                     )}
